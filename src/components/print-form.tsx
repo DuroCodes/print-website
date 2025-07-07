@@ -88,6 +88,11 @@ export default function PrintForm({ session }: { session: Session }) {
                 value: specialNotes || "None",
                 inline: false,
               },
+              {
+                name: "User",
+                value: session.user?.name ?? "Unknown User",
+                inline: false,
+              },
             ],
           },
         ],
