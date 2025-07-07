@@ -96,6 +96,16 @@ export default function PrintForm({ session }: { session: Session }) {
     e.preventDefault();
     if (!selectedFile) return;
 
+    // Check file size limit (8MB = 8 * 1024 * 1024 bytes)
+    const maxFileSize = 8 * 1024 * 1024;
+    if (selectedFile.size > maxFileSize) {
+      setStatus({
+        type: "error",
+        message: "File too large. Please ensure your file is under 8MB.",
+      });
+      return;
+    }
+
     setStatus({ type: "loading", message: "Sending request..." });
 
     const formData = new FormData();
@@ -155,9 +165,37 @@ export default function PrintForm({ session }: { session: Session }) {
       }, 5000);
     } catch (err) {
       console.error(err);
+
+      let errorMessage = "An error occurred. Please try again.";
+
+      if (err instanceof Error) {
+        if (
+          err.message.includes("413") ||
+          err.message.includes("Payload Too Large")
+        ) {
+          errorMessage =
+            "File too large. Please ensure your file is under 8MB.";
+        } else if (
+          err.message.includes("400") ||
+          err.message.includes("Bad Request")
+        ) {
+          errorMessage =
+            "Invalid file format. Please upload a valid STL or 3MF file.";
+        } else if (
+          err.message.includes("Failed to fetch") ||
+          err.message.includes("network")
+        ) {
+          errorMessage =
+            "Network error. Please check your connection and try again.";
+        } else {
+          errorMessage =
+            "An error occurred. Make sure your file is under 8MB and try again.";
+        }
+      }
+
       setStatus({
         type: "error",
-        message: "Failed to send request. Please try again.",
+        message: errorMessage,
       });
     }
   };
@@ -183,14 +221,45 @@ export default function PrintForm({ session }: { session: Session }) {
       const allowedExtensions = [".stl", ".3mf"];
 
       if (fileExtension && allowedExtensions.includes(`.${fileExtension}`)) {
+        // Check file size limit (8MB)
+        const maxFileSize = 8 * 1024 * 1024;
+        if (file.size > maxFileSize) {
+          setStatus({
+            type: "error",
+            message: "File too large. Please ensure your file is under 8MB.",
+          });
+          return;
+        }
         setSelectedFile(file);
+        setStatus({ type: null, message: "" }); // Clear any previous errors
+      } else {
+        setStatus({
+          type: "error",
+          message:
+            "Invalid file format. Please upload a valid STL or 3MF file.",
+        });
       }
     }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
+      const file = e.target.files[0];
+
+      // Check file size limit (8MB)
+      const maxFileSize = 8 * 1024 * 1024;
+      if (file.size > maxFileSize) {
+        setStatus({
+          type: "error",
+          message: "File too large. Please ensure your file is under 8MB.",
+        });
+        // Clear the file input
+        e.target.value = "";
+        return;
+      }
+
+      setSelectedFile(file);
+      setStatus({ type: null, message: "" }); // Clear any previous errors
     }
   };
 
@@ -331,6 +400,9 @@ export default function PrintForm({ session }: { session: Session }) {
                   </div>
                 )}
               </div>
+              <p className="text-xs text-neutral-500 mt-2">
+                File uploads are limited to 8MB.
+              </p>
             </div>
 
             <div className="space-y-2">
