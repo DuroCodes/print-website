@@ -96,7 +96,6 @@ export default function PrintForm({ session }: { session: Session }) {
     e.preventDefault();
     if (!selectedFile) return;
 
-    // Check file size limit (8MB = 8 * 1024 * 1024 bytes)
     const maxFileSize = 8 * 1024 * 1024;
     if (selectedFile.size > maxFileSize) {
       setStatus({
@@ -221,7 +220,6 @@ export default function PrintForm({ session }: { session: Session }) {
       const allowedExtensions = [".stl", ".3mf"];
 
       if (fileExtension && allowedExtensions.includes(`.${fileExtension}`)) {
-        // Check file size limit (8MB)
         const maxFileSize = 8 * 1024 * 1024;
         if (file.size > maxFileSize) {
           setStatus({
@@ -231,7 +229,7 @@ export default function PrintForm({ session }: { session: Session }) {
           return;
         }
         setSelectedFile(file);
-        setStatus({ type: null, message: "" }); // Clear any previous errors
+        setStatus({ type: null, message: "" });
       } else {
         setStatus({
           type: "error",
@@ -246,20 +244,18 @@ export default function PrintForm({ session }: { session: Session }) {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
 
-      // Check file size limit (8MB)
       const maxFileSize = 8 * 1024 * 1024;
       if (file.size > maxFileSize) {
         setStatus({
           type: "error",
           message: "File too large. Please ensure your file is under 8MB.",
         });
-        // Clear the file input
         e.target.value = "";
         return;
       }
 
       setSelectedFile(file);
-      setStatus({ type: null, message: "" }); // Clear any previous errors
+      setStatus({ type: null, message: "" });
     }
   };
 
