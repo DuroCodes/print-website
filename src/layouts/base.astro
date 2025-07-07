@@ -15,6 +15,11 @@ const { content } = Astro.props;
     <meta property="og:image" content="/og-image.png" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url.href} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={content.title} />
+    <meta name="twitter:description" content="Print Request Form" />
+    <meta name="twitter:image" content="/og-image.png" />
   </head>
   <body class="dark">
     <slot />
