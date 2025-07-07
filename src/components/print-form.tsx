@@ -142,7 +142,7 @@ export default function PrintForm({ session }: { session: Session }) {
         body: formData,
       });
 
-      if (!res.ok) throw new Error("Failed to send webhook");
+      if (!res.ok) throw new Error("Failed to send webhook", { cause: res });
 
       setStatus({ type: "success", message: "Request sent successfully! 🎉" });
       setSelectedFile(null);
