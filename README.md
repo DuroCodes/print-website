@@ -1,13 +1,16 @@
-# Astro with Tailwind
+# print website
 
-```sh
-bun create astro@latest -- --template with-tailwindcss
-```
+a simple print website to send print jobs to a discord webhook
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/with-tailwindcss)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/with-tailwindcss)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/with-tailwindcss/devcontainer.json)
+made for my friends so they can ask me to print stuff for them
 
-Astro comes with [Tailwind](https://tailwindcss.com) support out of the box. This example showcases how to style your Astro project with Tailwind.
+made with astro, astro auth, shadcn/ui and tailwindcss
 
-For complete setup instructions, please see our [Tailwind Integration Guide](https://docs.astro.build/en/guides/integrations-guide/tailwind).
+## setup
+1. clone the repo
+2. run `bun install`
+3. populate the `.env` file with the info based on the `.env.example` file
+   - you'll need to create a discord application and set the client id and secret
+   - and a webhook in a specific channel to get the webhook url
+4. run `bun dev` to start the development server or `bun build` to build the project for production
+5. open `http://localhost:4321` in your browser
